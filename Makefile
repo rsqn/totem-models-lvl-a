@@ -2,9 +2,7 @@
 
 #deploy: export AWS_PROFILE = rsqn
 
-build: 
-	export GO111MODULE=on
-	env GOOS=linux go build -ldflags="-s -w" -o bin/hello authz/main.go
+build: clean test
 
 test: 
 	export GO111MODULE=on
@@ -14,9 +12,11 @@ test:
 clean:
 	rm -rf ./bin ./vendor Gopkg.lock
 
-
 tidy:
 	cd authz && go mod tidy
+
+dist: clean tidy build
+	echo "Just commit I fink"
 
 #deploy: clean build
 #	sls deploy --verbose
