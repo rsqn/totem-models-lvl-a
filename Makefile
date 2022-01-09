@@ -16,8 +16,7 @@ tidy:
 	cd authz && go mod tidy
 
 dist: clean tidy build
-	echo "Just commit I fink"
-
-#deploy: clean build
-#	sls deploy --verbose
+	git add .
+	git commit -m "Deploy from make"
+	git push
 
