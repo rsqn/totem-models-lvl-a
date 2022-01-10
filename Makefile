@@ -1,21 +1,28 @@
 .PHONY: build clean
 
-#deploy: export AWS_PROFILE = rsqn
+MODULES=authz permissions
 
 build: clean test
 
-test: 
-	export GO111MODULE=on
-	# env GOOS=linux && 
+test: test-authz test-permissions
+
+test-authz:
 	cd authz && go test
+
+
+test-permissions:
+	cd permissions && go test
 
 clean:
 	rm -rf ./bin ./vendor Gopkg.lock
+	rm -rf ./authz/bin ./authz/vendor authz/Gopkg.lock
+	rm -rf ./permissions/bin ./permissions/vendor permissions/Gopkg.lock
 
 tidy:
-	cd authz && go mod tidy
+	$(foreach var,$(MODULES), cd $(var) && go mod tidy && cd ..;)
 
 dist: clean tidy build
+	echo "Just commit I fink"
 	git add .
 	git commit -m "Deploy from make"
 	git push
