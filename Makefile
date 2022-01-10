@@ -9,7 +9,6 @@ test: test-authz test-permissions
 test-authz:
 	cd authz && go test
 
-
 test-permissions:
 	cd permissions && go test
 
@@ -21,7 +20,11 @@ clean:
 tidy:
 	$(foreach var,$(MODULES), cd $(var) && go mod tidy && cd ..;)
 
-dist: clean tidy build
+increase-version: 
+	echo semver 
+	echo then tag
+
+dist: clean increase-version tidy build
 	echo "Just commit I fink"
 	git add .
 	git commit -m "Deploy from make"
