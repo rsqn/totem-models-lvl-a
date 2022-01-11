@@ -1,6 +1,8 @@
 .PHONY: build clean
 
 MODULES=authz permissions
+LATEST_TAG=$(shell git tag | head -n 1)
+NEXT_VERSION=$(shell semver $(LATEST_TAG) -i patch)
 
 build: clean test
 
@@ -12,6 +14,9 @@ test-authz:
 test-permissions:
 	cd permissions && go test
 
+post-build: 
+	rm -rf .tmp.build.meta
+
 clean:
 	rm -rf ./bin ./vendor Gopkg.lock
 	rm -rf ./authz/bin ./authz/vendor authz/Gopkg.lock
@@ -20,13 +25,12 @@ clean:
 tidy:
 	$(foreach var,$(MODULES), cd $(var) && go mod tidy && cd ..;)
 
-increase-version: 
-	echo semver 
-	echo then tag
 
-dist: clean increase-version tidy build
-	echo "Just commit I fink"
+dist: clean tidy build
 	git add .
-	git commit -m "Deploy from make"
+	git tag v$(NEXT_VERSION)
+	git commit -m "Dist from make for $(NEXT_VERSION)"
+	git push origin v$(NEXT_VERSION)
 	git push
+
 
