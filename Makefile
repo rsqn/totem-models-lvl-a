@@ -2,7 +2,7 @@
 
 MODULES=authz permissions
 LATEST_TAG=$(shell git tag -l | sort -V -r | head -n 1)
-NEXT_VERSION=$(shell semver $(LATEST_TAG) -i patch)
+NEXT_VERSION :=$(shell semver $(LATEST_TAG) -i patch)
 
 build: clean test
 
@@ -28,9 +28,9 @@ tidy:
 
 dist: clean tidy build
 	git add .
-	git tag v$(NEXT_VERSION)
+	git tag $(NEXT_VERSION)
 	git commit -m "Dist from make for $(NEXT_VERSION)"
-	git push origin v$(NEXT_VERSION)
+	git push origin $(NEXT_VERSION)
 	git push
 
 
