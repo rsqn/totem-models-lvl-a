@@ -29,8 +29,8 @@ tidy:
 dist: clean tidy build
 	git add .
 	git commit -m "Dist from make for $(NEXT_VERSION)"
+	git push
 	git tag $(NEXT_VERSION)
 	git push origin $(NEXT_VERSION)
-	git push
 
 
