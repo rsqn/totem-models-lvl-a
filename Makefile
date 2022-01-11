@@ -1,8 +1,8 @@
 .PHONY: build clean
 
 MODULES=authz permissions
-LATEST_TAG=$(shell git tag -l | sort -V -r | head -n 1)
-NEXT_VERSION :=$(shell semver $(LATEST_TAG) -i patch)
+LATEST_TAG= := $(shell git tag -l | sort -V -r | head -n 1)
+NEXT_VERSION := v$(shell semver $(LATEST_TAG) -i patch)
 
 build: clean test
 
